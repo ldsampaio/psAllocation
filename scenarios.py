@@ -161,9 +161,9 @@ def drawScenario(C, R, K, c_x, c_y, k_x, k_y):
             x, y = hexagon(c_x[i], c_y[i], R)
             drawHexagon(x, y)
         for k in range(0, K):
-            drawUser(k_x[i][k], k_y[i][k])
+            drawUser(k_x[k][i], k_y[k][i])
         i += 1
-    plt.show()
+    return
 
 
 ########################################################################################################################
@@ -174,12 +174,12 @@ def create_scenario(C, R, K, Fmin, Fmax, S, gamma, W, Bmax, d0):
     idx = permutations(C)
     xg, yg = genPositions(R)
 
-    k_x = np.zeros((int(BS), K))
-    k_y = np.zeros((int(BS), K))
+    k_x = np.zeros((K, int(BS)))
+    k_y = np.zeros((K, int(BS)))
     c_x = np.zeros((int(BS), 1))
     c_y = np.zeros((int(BS), 1))
-    beta = np.zeros((int(BS), int(K), int(BS), int(W)))
-    tmp = np.zeros((int(BS), int(K), int(BS), int(W)))
+    beta = np.zeros((int(K), int(BS),  int(BS), int(W)))
+    tmp = np.zeros((int(K), int(BS), int(BS), int(W)))
 
     # Random Frequencies and Bandwidths
     B = randomBandwidths(W, Bmax)
@@ -196,8 +196,8 @@ def create_scenario(C, R, K, Fmin, Fmax, S, gamma, W, Bmax, d0):
             c_x[i] = j[0] * (3 / 2) * R
             c_y[i] = (j[1] * S60 * R) + np.sign((j[1])) * (abs(j[1]) - 1) * S60 * R
         for k in range(0, K):
-            k_x[i, k], k_y[i, k] = randomPosition(xg, yg, k_x, k_y)
-            k_x[i, k], k_y[i, k] = transferPosition(k_x[i, k], k_y[i, k], c_x[i], c_y[i])
+            k_x[k, i], k_y[k, i] = randomPosition(xg, yg, k_x, k_y)
+            k_x[k, i], k_y[k, i] = transferPosition(k_x[k, i], k_y[k, i], c_x[i], c_y[i])
         i += 1
 
     # Calculating Distances
