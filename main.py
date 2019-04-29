@@ -33,7 +33,7 @@ d0 = 10
 # PSO Population Size
 psize = 25
 # PSO Max Iteration
-maxit = 100
+maxit = 1000
 
 ########################################################################################################################
 # Auxiliary Functions
@@ -96,6 +96,11 @@ def pso(beta,sigma,psize,maxit):
                             pop[d1, d2, d3, p] = 1
                         else:
                             pop[d1, d2, d3, p] = 0
+
+            # Discarding unfeasible candidates
+            if np.sum(pop[:, :, :, p].ravel()) > len(pop) * len(pop[0][0]):
+                pop[:, :, :, p] = np.zeros((len(pop), len(pop[0]), len(pop[0][0])))
+                pop[:, :, :, p] = firstGeneration(pop[:, :, :, p])
 
             # Recalculate the Fitness
             f[p] = fitness(pop[:, :, :, p], beta, sigma)
